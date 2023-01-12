@@ -1,0 +1,144 @@
+---
+title: "random forest"
+author: "Jubril"
+date: "2022-08-17"
+output: html_document
+---
+
+```{r}
+library(randomForest)
+library(skimr)
+```
+
+```{r}
+rfNews()
+```
+
+```{r}
+getwd()
+```
+
+```{r}
+setwd("C:/Users/jubril/Desktop/R CLASS")
+```
+
+
+```{r pressure, echo=FALSE, fig.cap="B caption", out.width= "100%"}
+knitr::include_graphics("original Data.png")
+
+```
+
+```{r}
+require(caTools)
+```
+
+```{r}
+Home = read.csv("Clean Heart disease dataset.csv", header = TRUE)
+Home
+```
+
+
+```{r}
+colSums(is.na(Home))
+```
+
+```{r}
+
+names(Home)
+```
+
+```{r}
+unique(Home$num)
+unique(Home$ca)
+unique(Home$thai)
+```
+
+```{r}
+Home$num [data$num > 1] = 1
+```
+
+
+```{r}
+library(skimr) #helps to describe data statistically
+skim(Home) %>% 
+  tibble:: as.tibble() # put in table format
+```
+
+```{r}
+sapply(Home,class)
+```
+
+
+```{r}
+Home = transform(
+  Home,
+  age= as.integer(age),
+  sex= as.factor(sex),
+  cp= as.factor(cp),
+  trestbps= as.integer(trestbps),
+  choi= as.integer(choi),
+  fbs= as.factor(fbs),
+  restecg= as.factor(restecg),
+  thalach = as.integer(thalach),
+  exang = as.factor(exang),
+  oldpeak = as.factor(slope),
+  slope = as.factor(slope),
+  ca = as.factor(ca),
+  thai = as.factor(thai),
+  num = as.factor(num)
+  
+  )
+```
+
+
+```{r}
+summary(Home)
+```
+
+```{r}
+Home[Home =="?"] =NA
+```
+
+```{r}
+is.null(Home)
+```
+
+
+```{r}
+ sample = sample.split(Home$num, SplitRatio = .80) # 80%
+sample
+```
+
+```{r}
+train = subset(Home, sample == TRUE)
+nrow(train)
+ncol(train)
+```
+
+```{r}
+test = subset(Home, sample == F)
+nrow(test)
+ncol(test)
+```
+
+```{r}
+dim(train)
+dim(test)
+```
+
+```{r}
+rf = randomForest(num ~.,data=train)
+rf
+```
+
+```{r}
+pred = predict(rf,newdata = test[-14])
+pred
+```
+
+```{r}
+confussion_matrix = table(test[,14],pred)
+confussion_matrix
+```
+
+
